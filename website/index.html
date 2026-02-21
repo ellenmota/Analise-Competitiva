@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inteligencia Competitiva | Bancario PJ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'display': ['DM Serif Display', 'serif'],
+                        'sans': ['DM Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        'navy': '#0A1628',
+                        'navy-light': '#1A2942',
+                        'accent': '#F97316',
+                        'accent-light': '#FDBA74',
+                        'slate-dark': '#334155',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .gradient-hero { background: linear-gradient(135deg, #0A1628 0%, #1A2942 50%, #0F172A 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #F97316; transition: width 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .accordion-content.open { max-height: 500px; }
+        .badge-green { background: #10B981; color: white; }
+        .badge-yellow { background: #F59E0B; color: white; }
+        .badge-red { background: #EF4444; color: white; }
+        .table-row:hover { background: #F8FAFC; }
+        th.sortable { cursor: pointer; }
+        th.sortable:hover { background: #E2E8F0; }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-slate-800">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-navy/95 backdrop-blur-sm z-50 border-b border-navy-light">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-white font-display text-xl">IC<span class="text-accent">.</span>PJ</div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#scorecard" class="nav-link text-gray-300 hover:text-white text-sm">Scorecard</a>
+                    <a href="#lideres" class="nav-link text-gray-300 hover:text-white text-sm">Lideres</a>
+                    <a href="#gaps" class="nav-link text-gray-300 hover:text-white text-sm">Gaps</a>
+                    <a href="#jornada" class="nav-link text-gray-300 hover:text-white text-sm">Jornada</a>
+                    <a href="#sugestoes" class="nav-link text-gray-300 hover:text-white text-sm">Sugestoes</a>
+                    <a href="#perfis" class="nav-link text-gray-300 hover:text-white text-sm">Perfis</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-hero pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h1 class="font-display text-4xl md:text-5xl text-white mb-4">Inteligencia Competitiva</h1>
+                <p class="text-xl text-gray-400">Segmento PJ | Inicio de Relacionamento | Jornada 0-90 dias</p>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                <div class="bg-navy-light rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl font-bold text-accent mb-2">10</div>
+                    <div class="text-gray-400 text-sm">Concorrentes Analisados</div>
+                </div>
+                <div class="bg-navy-light rounded-xl p-6 border border-gray-700">
+                    <div class="text-2xl font-bold text-accent mb-2">18/02/2026</div>
+                    <div class="text-gray-400 text-sm">Data da Analise</div>
+                </div>
+                <div class="bg-navy-light rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl font-bold text-accent mb-2">8</div>
+                    <div class="text-gray-400 text-sm">Gaps Criticos</div>
+                </div>
+                <div class="bg-navy-light rounded-xl p-6 border border-gray-700">
+                    <div class="text-4xl font-bold text-accent mb-2">15</div>
+                    <div class="text-gray-400 text-sm">Funcionalidades Unicas</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scorecard Section -->
+    <section id="scorecard" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="font-display text-3xl text-navy mb-2">Scorecard Comparativo</h2>
+            <p class="text-gray-500 mb-8">Avaliacao 1-5 em cada dimensao | Media ponderada</p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm" id="scorecardTable">
+                    <thead>
+                        <tr class="bg-navy text-white">
+                            <th class="p-3 text-left font-semibold">Categoria</th>
+                            <th class="p-3 text-center font-semibold">Nubank</th>
+                            <th class="p-3 text-center font-semibold">Inter</th>
+                            <th class="p-3 text-center font-semibold">C6</th>
+                            <th class="p-3 text-center font-semibold">BTG</th>
+                            <th class="p-3 text-center font-semibold">MP</th>
+                            <th class="p-3 text-center font-semibold">Sicoob</th>
+                            <th class="p-3 text-center font-semibold">Bradesco</th>
+                            <th class="p-3 text-center font-semibold">Santander</th>
+                            <th class="p-3 text-center font-semibold">Caixa</th>
+                            <th class="p-3 text-center font-semibold bg-accent">Itau</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C1 - Abertura de conta</td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.0</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C2 - Onboarding 0-90d</td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C3 - App/UX</td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C4 - Pix e transferencias</td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C5 - Credito e financiamento</td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C6 - Maquininha/adquirencia</td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C7 - Atendimento</td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C8 - Taxas e pricing</td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C9 - Ecossistema/integracoes</td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C10 - Inovacao</td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">5.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                        </tr>
+                        <tr class="table-row border-b">
+                            <td class="p-3 font-medium">C11 - Reputacao</td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.0</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-red px-2 py-0.5 rounded-full text-xs">2.5</span></td>
+                            <td class="p-3 text-center"><span class="badge-yellow px-2 py-0.5 rounded-full text-xs">3.5</span></td>
+                            <td class="p-3 text-center bg-orange-50"><span class="badge-green px-2 py-0.5 rounded-full text-xs">4.5</span></td>
+                        </tr>
+                        <tr class="bg-navy-light text-white font-semibold">
+                            <td class="p-3">MEDIA GERAL</td>
+                            <td class="p-3 text-center">4.3</td>
+                            <td class="p-3 text-center">4.4</td>
+                            <td class="p-3 text-center">4.1</td>
+                            <td class="p-3 text-center">4.3</td>
+                            <td class="p-3 text-center">4.1</td>
+                            <td class="p-3 text-center">3.7</td>
+                            <td class="p-3 text-center">3.4</td>
+                            <td class="p-3 text-center">3.2</td>
+                            <td class="p-3 text-center">3.2</td>
+                            <td class="p-3 text-center bg-accent">4.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-sm text-gray-400 mt-4">Legenda: Nubank, Inter Empresas, C6 Bank, BTG Empresas, Mercado Pago, Sicoob, Bradesco, Santander, Caixa, Itau</p>
+        </div>
+    </section>
+
+    <!-- Ranking -->
+    <section id="lideres" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="font-display text-3xl text-navy mb-2">Ranking Geral</h2>
+            <p class="text-gray-500 mb-8">Classificacao por nota media ponderada</p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- 1o lugar -->
+                <div class="bg-white rounded-xl p-6 border-2 border-yellow-400 shadow-lg">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-3xl">&#129351;</span>
+                        <span class="text-sm text-gray-500">1o lugar</span>
+                    </div>
+                    <h3 class="font-bold text-xl text-navy">Inter Empresas</h3>
+                    <div class="text-3xl font-bold text-accent mt-2">4.4</div>
+                    <p class="text-xs text-gray-500 mt-1">Ecossistema completo + gratuito</p>
+                </div>
+
+                <!-- 2o lugar -->
+                <div class="bg-white rounded-xl p-6 border border-gray-200">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-2xl">&#129352;</span>
+                        <span class="text-sm text-gray-500">2o lugar</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-navy">Nubank / BTG</h3>
+                    <div class="text-2xl font-bold text-navy mt-2">4.3</div>
+                    <p class="text-xs text-gray-500 mt-1">Empate tecnico</p>
+                </div>
+
+                <!-- 3o lugar -->
+                <div class="bg-white rounded-xl p-6 border border-gray-200">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-2xl">&#129353;</span>
+                        <span class="text-sm text-gray-500">3o lugar</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-navy">C6 / MP</h3>
+                    <div class="text-2xl font-bold text-navy mt-2">4.1</div>
+                    <p class="text-xs text-gray-500 mt-1">Empate tecnico</p>
+                </div>
+
+                <!-- 4o lugar -->
+                <div class="bg-white rounded-xl p-6 border border-orange-300 bg-orange-50">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-xl">4o</span>
+                        <span class="text-sm text-gray-500">Itau Empresas</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-accent">ITAU</h3>
+                    <div class="text-2xl font-bold text-accent mt-2">4.0</div>
+                    <p class="text-xs text-gray-500 mt-1">Referencia interna</p>
+                </div>
+
+                <!-- 5o+ -->
+                <div class="bg-white rounded-xl p-6 border border-gray-200">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-sm text-gray-500">5o-9o lugar</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-navy">Incumbentes</h3>
+                    <div class="text-2xl font-bold text-gray-400 mt-2">3.2-3.7</div>
+                    <p class="text-xs text-gray-500 mt-1">Sicoob, Bradesco, Santander, Caixa</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gaps Criticos -->
+    <section id="gaps" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="font-display text-3xl text-navy mb-2">Gaps Criticos para o Itau Empresas</h2>
+            <p class="text-gray-500 mb-8">Principais oportunidades identificadas na analise</p>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <!-- Gap 1 -->
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="badge-red px-3 py-1 rounded-full text-sm font-medium">CRITICO</span>
+                        <span class="font-semibold text-navy">App Empresas muito limitado</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">App PJ tem apenas 37,7% de resolucao vs 83,8% do app PF. Muitas funcoes so no desktop.</p>
+                    <div class="text-xs text-gray-500">Referencia: App Nubank (5.0/5)</div>
+                </div>
+
+                <!-- Gap 2 -->
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="badge-red px-3 py-1 rounded-full text-sm font-medium">CRITICO</span>
+                        <span class="font-semibold text-navy">Taxas de credito acima de cooperativas</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Sicoob oferece Capital de Giro 38% mais barato. IOF 87% menor. Participacao nos resultados.</p>
+                    <div class="text-xs text-gray-500">Referencia: Sicoob (5.0/5 em credito)</div>
+                </div>
+
+                <!-- Gap 3 -->
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="badge-yellow px-3 py-1 rounded-full text-sm font-medium">ALTO</span>
+                        <span class="font-semibold text-navy">Mensalidades vs gratuidade fintechs</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Plano Adapt: R$ 139-349/mes. Nubank, Inter, C6: gratuitos. Sistema de isencoes ajuda mas nao resolve.</p>
+                    <div class="text-xs text-gray-500">Referencia: Nubank, Inter, C6 (gratuitos)</div>
+                </div>
+
+                <!-- Gap 4 -->
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="badge-yellow px-3 py-1 rounded-full text-sm font-medium">ALTO</span>
+                        <span class="font-semibold text-navy">Integracao e-commerce inferior</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Mercado Pago domina sellers com integracao nativa ML. BTG tem APIs robustas. Itau pode evoluir.</p>
+                    <div class="text-xs text-gray-500">Referencia: Mercado Pago (5.0/5 ecossistema)</div>
+                </div>
+
+                <!-- Gap 5 -->
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="badge-yellow px-3 py-1 rounded-full text-sm font-medium">MEDIO</span>
+                        <span class="font-semibold text-navy">Maquininha no celular (NuTap)</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Nubank lidera com NuTap sem custo. Point Tap do MP por R$ 34,90. Laranjinha requer device fisico.</p>
+                    <div class="text-xs text-gray-500">Referencia: Nubank NuTap, MP Point Tap</div>
+                </div>
+
+                <!-- Gap 6 -->
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="badge-yellow px-3 py-1 rounded-full text-sm font-medium">MEDIO</span>
+                        <span class="font-semibold text-navy">Rendimento automatico do saldo</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">BTG e Mercado Pago oferecem 100-105% CDI automatico. Itau pode implementar similar.</p>
+                    <div class="text-xs text-gray-500">Referencia: BTG, Mercado Pago</div>
+                </div>
+
+                <!-- Gap 7 -->
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="badge-yellow px-3 py-1 rounded-full text-sm font-medium">MEDIO</span>
+                        <span class="font-semibold text-navy">WhatsApp 24h sem restricao</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">C6 oferece WhatsApp 24h para todos. Caixa tem 0800 via WhatsApp. Canal preferido de MEIs.</p>
+                    <div class="text-xs text-gray-500">Referencia: C6 Bank</div>
+                </div>
+
+                <!-- Gap 8 -->
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="badge-yellow px-3 py-1 rounded-full text-sm font-medium">MEDIO</span>
+                        <span class="font-semibold text-navy">Programa de pontos/cashback robusto</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">C6 Atomos com pontos sem expiracao. Inter Loop com cashback. Mais Vantagens e inicio promissor.</p>
+                    <div class="text-xs text-gray-500">Referencia: C6 Atomos, Inter Loop</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Perfis dos Concorrentes -->
+    <section id="perfis" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="font-display text-3xl text-navy mb-2">Perfis dos Concorrentes</h2>
+            <p class="text-gray-500 mb-8">Resumo estrategico de cada instituicao analisada</p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Nubank -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-purple-600 p-4">
+                        <h3 class="text-white font-display text-xl">Nubank</h3>
+                        <p class="text-purple-200 text-xs">Fintech | 4.5M clientes PJ</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">4.3/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Melhor app do mercado</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> NuTap (maquininha celular)</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Conversao PF->PJ simples</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> Credito limitado</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inter -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-orange-500 p-4">
+                        <h3 class="text-white font-display text-xl">Inter Empresas</h3>
+                        <p class="text-orange-200 text-xs">Banco Digital | 2M clientes PJ</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">4.4/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Ecossistema mais completo</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Advisor dedicado (PJ Pro)</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Global Account (USD/EUR)</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> Abertura mais lenta</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- C6 Bank -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-gray-800 p-4">
+                        <h3 class="text-white font-display text-xl">C6 Bank</h3>
+                        <p class="text-gray-400 text-xs">Banco Digital | 1.5M clientes PJ</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">4.1/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Atomos (pontos sem expiracao)</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> WhatsApp 24h para todos</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> C6 Pay multiadquirencia</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> Nota 6.3 Reclame Aqui</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BTG -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-blue-900 p-4">
+                        <h3 class="text-white font-display text-xl">BTG Empresas</h3>
+                        <p class="text-blue-300 text-xs">Banco S2 | PME a Grandes</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">4.3/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Cartao IOF-free</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Rendimento 100% CDI</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> APIs robustas</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> Foco em empresas maiores</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mercado Pago -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-blue-500 p-4">
+                        <h3 class="text-white font-display text-xl">Mercado Pago</h3>
+                        <p class="text-blue-200 text-xs">Fintech/IP | 10M+ sellers</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">4.1/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Integracao ML nativa</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Point Tap R$ 34,90</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> 105% CDI automatico</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> Taxas acima do mercado</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sicoob -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-green-600 p-4">
+                        <h3 class="text-white font-display text-xl">Sicoob</h3>
+                        <p class="text-green-200 text-xs">Cooperativa | 9.1M cooperados</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">3.7/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Menores taxas do mercado</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Participacao nos resultados</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> 4.700 pontos</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> UX inferior</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bradesco -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-red-600 p-4">
+                        <h3 class="text-white font-display text-xl">Bradesco</h3>
+                        <p class="text-red-200 text-xs">Incumbente S1 | 70M clientes</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">3.4/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> 5.300+ agencias</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Bradesco Seguros</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> App criticado</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> Mensalidades altas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Santander -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-red-700 p-4">
+                        <h3 class="text-white font-display text-xl">Santander</h3>
+                        <p class="text-red-200 text-xs">Incumbente S1 | 68.9M clientes</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">3.2/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Getnet integrada</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Sistema de isencoes</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> "Ruim" Reclame Aqui</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> 21 dias p/ resposta</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caixa -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                    <div class="bg-blue-800 p-4">
+                        <h3 class="text-white font-display text-xl">Caixa</h3>
+                        <p class="text-blue-200 text-xs">Estatal S1 | 150M+ clientes</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-gray-500">Nota</span>
+                            <span class="font-bold text-xl text-navy">3.2/5</span>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Pronampe lider</div>
+                            <div class="flex items-center gap-2"><span class="text-green-500">+</span> Credito subsidiado</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> Abertura presencial</div>
+                            <div class="flex items-center gap-2"><span class="text-red-500">-</span> Burocracia alta</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jornada do Usuario -->
+    <section id="jornada" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="font-display text-3xl text-navy mb-2">Jornada do Usuario</h2>
+            <p class="text-gray-500 mb-8">Clique em um concorrente para visualizar os screenshots de cada etapa</p>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <!-- Nubank -->
+                <button onclick="openJourney('nubank')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-purple-400 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">N</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">Nubank</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- Inter -->
+                <button onclick="openJourney('inter')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-orange-400 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">I</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">Inter</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- C6 -->
+                <button onclick="openJourney('c6')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-gray-600 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">C6</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">C6 Bank</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- BTG -->
+                <button onclick="openJourney('btg')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-800 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">B</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">BTG</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- Mercado Pago -->
+                <button onclick="openJourney('mp')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">MP</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">Mercado Pago</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- Sicoob -->
+                <button onclick="openJourney('sicoob')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-green-500 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-green-600 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">S</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">Sicoob</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- Bradesco -->
+                <button onclick="openJourney('bradesco')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-red-500 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">B</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">Bradesco</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- Santander -->
+                <button onclick="openJourney('santander')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-red-600 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-red-700 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">S</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">Santander</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- Caixa -->
+                <button onclick="openJourney('caixa')" class="bg-white rounded-xl p-4 border border-gray-200 hover:border-blue-700 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 rounded-full bg-blue-800 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">C</span>
+                    </div>
+                    <h3 class="font-semibold text-navy text-sm">Caixa</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+
+                <!-- Itau -->
+                <button onclick="openJourney('itau')" class="bg-white rounded-xl p-4 border-2 border-accent hover:shadow-lg transition-all group bg-orange-50">
+                    <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">I</span>
+                    </div>
+                    <h3 class="font-semibold text-accent text-sm">Itau</h3>
+                    <p class="text-xs text-gray-400 mt-1">Ver jornada</p>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Jornada -->
+    <div id="journeyModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <div class="flex items-center gap-4">
+                    <div id="modalIcon" class="w-10 h-10 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold"></span>
+                    </div>
+                    <div>
+                        <h3 id="modalTitle" class="font-display text-xl text-navy"></h3>
+                        <p class="text-sm text-gray-500">Jornada do usuario - Abertura de conta</p>
+                    </div>
+                </div>
+                <button onclick="closeJourney()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div id="modalContent" class="flex-1 overflow-y-auto p-6">
+                <!-- Content will be injected here -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div id="modalFooter" class="hidden border-t border-gray-200 p-4">
+                <div class="flex items-center justify-between">
+                    <button id="prevBtn" onclick="prevStep()" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-navy transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Anterior
+                    </button>
+                    <div id="stepIndicator" class="flex gap-2"></div>
+                    <button id="nextBtn" onclick="nextStep()" class="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-navy transition-colors">
+                        Proximo
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sugestoes Estrategicas -->
+    <section id="sugestoes" class="py-16 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="font-display text-3xl text-navy mb-2">Sugestoes Estrategicas</h2>
+            <p class="text-gray-500 mb-8">Recomendacoes prioritarias para o Itau Empresas</p>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Curto Prazo -->
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Curto Prazo</span>
+                        <span class="text-gray-400 text-sm">0-6 meses</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-green-50 border border-green-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Equiparar app Empresas ao PF</h4>
+                            <p class="text-sm text-gray-600">Principal gap identificado. Taxa resolucao 37,7% vs 83,8%.</p>
+                        </div>
+                        <div class="bg-green-50 border border-green-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Investimentos no app mobile</h4>
+                            <p class="text-sm text-gray-600">Resgate de investimentos so no desktop. Clientes reclamam.</p>
+                        </div>
+                        <div class="bg-green-50 border border-green-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Melhorar atendimento PJ</h4>
+                            <p class="text-sm text-gray-600">Aumentar taxa resolucao. Reduzir respostas padronizadas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medio Prazo -->
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">Medio Prazo</span>
+                        <span class="text-gray-400 text-sm">6-12 meses</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Desenvolver "Itau Tap"</h4>
+                            <p class="text-sm text-gray-600">Maquininha no celular para competir com NuTap e Point Tap.</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Rendimento automatico 100% CDI</h4>
+                            <p class="text-sm text-gray-600">BTG e MP ja oferecem. Diferencial relevante para saldo parado.</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Expandir Mais Vantagens</h4>
+                            <p class="text-sm text-gray-600">Programa novo e promissor. Acelerar adocao e beneficios.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Longo Prazo -->
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">Longo Prazo</span>
+                        <span class="text-gray-400 text-sm">12+ meses</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-purple-50 border border-purple-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Conta gratuita basica</h4>
+                            <p class="text-sm text-gray-600">Para competir com Nubank/Inter/C6. Freemium com upgrade.</p>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Super App PJ unificado</h4>
+                            <p class="text-sm text-gray-600">Integrar PF+PJ com experiencia unica e consistente.</p>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-100 rounded-xl p-4">
+                            <h4 class="font-semibold text-navy mb-2">Taxas competitivas vs cooperativas</h4>
+                            <p class="text-sm text-gray-600">Sicoob oferece taxas 38% menores. Avaliar segmentos prioritarios.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-navy py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm mb-2">Analise realizada em <strong class="text-white">18 de Fevereiro de 2026</strong> | 10 concorrentes analisados</p>
+            <p class="text-gray-500 text-xs">Produzido por <strong class="text-white">Ellen Mota</strong></p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('.accordion-icon');
+            content.classList.toggle('open');
+            icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0)';
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Dados das jornadas dos concorrentes
+        // Para adicionar screenshots, adicione os caminhos das imagens no array 'steps'
+        const journeyData = {
+            nubank: {
+                name: 'Nubank',
+                color: 'bg-purple-600',
+                letter: 'N',
+                steps: [
+                    { image: 'screenshots/Nubank/step1.PNG', title: 'Tela inicial', description: 'Abertura de conta PJ no app Nubank' },
+                ]
+            },
+            inter: {
+                name: 'Inter Empresas',
+                color: 'bg-orange-500',
+                letter: 'I',
+                steps: []
+            },
+            c6: {
+                name: 'C6 Bank',
+                color: 'bg-gray-800',
+                letter: 'C6',
+                steps: []
+            },
+            btg: {
+                name: 'BTG Empresas',
+                color: 'bg-blue-900',
+                letter: 'B',
+                steps: []
+            },
+            mp: {
+                name: 'Mercado Pago',
+                color: 'bg-blue-500',
+                letter: 'MP',
+                steps: []
+            },
+            sicoob: {
+                name: 'Sicoob',
+                color: 'bg-green-600',
+                letter: 'S',
+                steps: []
+            },
+            bradesco: {
+                name: 'Bradesco',
+                color: 'bg-red-600',
+                letter: 'B',
+                steps: []
+            },
+            santander: {
+                name: 'Santander',
+                color: 'bg-red-700',
+                letter: 'S',
+                steps: []
+            },
+            caixa: {
+                name: 'Caixa',
+                color: 'bg-blue-800',
+                letter: 'C',
+                steps: []
+            },
+            itau: {
+                name: 'Itau Empresas',
+                color: 'bg-accent',
+                letter: 'I',
+                steps: []
+            }
+        };
+
+        let currentJourney = null;
+        let currentStep = 0;
+
+        function openJourney(key) {
+            const data = journeyData[key];
+            if (!data) return;
+
+            currentJourney = data;
+            currentStep = 0;
+
+            const modal = document.getElementById('journeyModal');
+            const modalIcon = document.getElementById('modalIcon');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            const modalFooter = document.getElementById('modalFooter');
+
+            // Atualizar header
+            modalIcon.className = `w-10 h-10 rounded-full flex items-center justify-center ${data.color}`;
+            modalIcon.innerHTML = `<span class="text-white font-bold">${data.letter}</span>`;
+            modalTitle.textContent = data.name;
+
+            // Verificar se tem steps
+            if (data.steps.length === 0) {
+                // Empty State
+                modalContent.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-16 text-center">
+                        <div class="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+                            <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold text-navy mb-2">Jornada ainda nao mapeada</h4>
+                        <p class="text-gray-500 max-w-md mb-6">
+                            Os screenshots da jornada de abertura de conta do ${data.name} ainda nao foram adicionados.
+                        </p>
+                        <div class="bg-gray-50 rounded-xl p-4 max-w-sm">
+                            <p class="text-sm text-gray-600">
+                                <strong class="text-navy">Como adicionar:</strong><br>
+                                Adicione os screenshots no array <code class="bg-gray-200 px-1 rounded">steps</code> do objeto <code class="bg-gray-200 px-1 rounded">${key}</code> no codigo JavaScript.
+                            </p>
+                        </div>
+                    </div>
+                `;
+                modalFooter.classList.add('hidden');
+            } else {
+                // Mostrar steps
+                renderStep();
+                modalFooter.classList.remove('hidden');
+                updateStepIndicator();
+            }
+
+            // Mostrar modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeJourney() {
+            const modal = document.getElementById('journeyModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+            currentJourney = null;
+            currentStep = 0;
+        }
+
+        function renderStep() {
+            if (!currentJourney || currentJourney.steps.length === 0) return;
+
+            const step = currentJourney.steps[currentStep];
+            const modalContent = document.getElementById('modalContent');
+
+            modalContent.innerHTML = `
+                <div class="flex flex-col items-center">
+                    <div class="mb-4 text-center">
+                        <span class="inline-block px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium mb-2">
+                            Etapa ${currentStep + 1} de ${currentJourney.steps.length}
+                        </span>
+                        <h4 class="text-lg font-semibold text-navy">${step.title || ''}</h4>
+                        <p class="text-gray-500 text-sm">${step.description || ''}</p>
+                    </div>
+                    <div class="bg-gray-100 rounded-xl p-2 max-w-md w-full">
+                        <img src="${step.image}" alt="${step.title}" class="w-full h-auto rounded-lg shadow-lg" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-96 text-gray-400\\'>Imagem nao encontrada</div>'">
+                    </div>
+                </div>
+            `;
+
+            updateStepIndicator();
+            updateNavigationButtons();
+        }
+
+        function updateStepIndicator() {
+            if (!currentJourney || currentJourney.steps.length === 0) return;
+
+            const indicator = document.getElementById('stepIndicator');
+            indicator.innerHTML = currentJourney.steps.map((_, index) => `
+                <button onclick="goToStep(${index})" class="w-2.5 h-2.5 rounded-full transition-colors ${index === currentStep ? 'bg-accent' : 'bg-gray-300 hover:bg-gray-400'}"></button>
+            `).join('');
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
+            nextBtn.style.visibility = currentStep === currentJourney.steps.length - 1 ? 'hidden' : 'visible';
+        }
+
+        function nextStep() {
+            if (!currentJourney || currentStep >= currentJourney.steps.length - 1) return;
+            currentStep++;
+            renderStep();
+        }
+
+        function prevStep() {
+            if (!currentJourney || currentStep <= 0) return;
+            currentStep--;
+            renderStep();
+        }
+
+        function goToStep(index) {
+            if (!currentJourney || index < 0 || index >= currentJourney.steps.length) return;
+            currentStep = index;
+            renderStep();
+        }
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeJourney();
+            }
+        });
+
+        // Fechar modal clicando fora
+        document.getElementById('journeyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeJourney();
+            }
+        });
+    </script>
+</body>
+</html>
