@@ -1,5 +1,11 @@
 # 🏦 Análise Competitiva PJ
 
+![Markdown](https://img.shields.io/badge/Markdown-000000?style=flat&logo=markdown&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Claude AI](https://img.shields.io/badge/Claude_AI-191919?style=flat&logo=anthropic&logoColor=white)
+
 Estudo aprofundado do mercado bancário brasileiro voltado para Pessoa Jurídica (PJ), com foco na jornada de abertura de conta e os primeiros 90 dias de relacionamento. Análise realizada para subsidiar decisões estratégicas de produto, experiência do cliente e growth.
 
 ---
